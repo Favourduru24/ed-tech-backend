@@ -289,7 +289,13 @@ const deleteFeed = async (req, res) => {
 
      try {
        
-       const user = req.params.userId
+        const user = req.params.id
+
+        if(!mongoose.Types.ObjectId.isValid(user)) {
+            return res.status(400).json({
+             message: 'Invalid ID format!'
+           })
+        }
 
        const userFeed = await Feed.find({userId: user})
         .sort({createdAt: -1})

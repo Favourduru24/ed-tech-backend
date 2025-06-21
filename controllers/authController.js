@@ -87,46 +87,46 @@ const login = async (req, res, next) => {
 };
 
 const refresh = (req, res) => {
-      const cookies = req.cookies
+    const cookies = req.cookies;
 
-      if(!cookies?.jwt) {
-         return res.status(401).json({message: 'Unauthourized invalid cookie recieved!'})
-      }                    
+    if (!cookies?.jwt) {
+        return res.status(401).json({ message: 'Unauthorized - no cookie received!' });
+    }
 
-      const refreshToken = cookies.jwt
+    const refreshToken = cookies.jwt;
 
-    try{
-
+    try {
         jwt.verify(
             refreshToken,
             process.env.REFRESH_TOKEN_SECRET,
             async (err, decoded) => {
-            if(err) return res.status(403).json({message: 'Forbidden!'})
+                if (err) return res.status(403).json({ message: 'Forbidden!' });
 
-             const foundUser = await User.findOne({email: decoded.email}).exec()
+                const foundUser = await User.findOne({ email: decoded.email }).exec();
 
-             if(!foundUser) return res.status(401).json({message: 'Unauthorized!'})
+                if (!foundUser) return res.status(401).json({ message: 'Unauthorized!' });
 
                 const accessToken = jwt.sign(
                     {
-                       "UserInfo": {
-                           "userId": foundUser._id
-                       }
+                        UserInfo: {
+                            id: foundUser._id,
+                            username: foundUser.username,
+                            email: foundUser.email,
+                            profilePics: foundUser.profilePics
+                        }
                     },
                     process.env.ACCESS_TOKEN_SECRET,
-                    {expiresIn: '1d'}
-               )
-        
-               res.json({accessToken})
-            })
+                    { expiresIn: '1d' }
+                );
 
-
-    }catch(error) {
-        console.log(error)
-        next(error)
+                res.json({ accessToken });
+            }
+        );
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Server error' });
     }
-
-}
+};
 
 const logout = (req, res) => {
    const cookies = req.cookies

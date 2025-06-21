@@ -9,7 +9,7 @@ router.route('/')
 .get(feedController.getAllFeed)
 
 router.get('/feed/:id', feedController.getFeedById)
-router.get('/feed/user/:userId', verifyJwt, feedController.getUserFeed)
+router.get('/feed/user/:id', verifyJwt, feedController.getUserFeed)
 router.get('/feed-category/:id/:categoryId', feedController.getRelatedFeedByCategory)
 router.patch('/feed/update/:id', feedController.updateFeed)
 router.put('/feed/like/:id', feedController.likeFeed)
