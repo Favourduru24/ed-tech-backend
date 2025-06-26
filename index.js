@@ -15,7 +15,7 @@ const fs = require('fs')
 const credentials = require('./middleware/credential')
 const fsPromise = require('fs').promises
 const cloudinary = require('./config/cloudinary')
-const {app, server} = require('./config/socket')
+const app = express()
 
 app.use(credentials)
 
@@ -99,6 +99,6 @@ app.use('/history', require('./routes/historyRoutes'))
     })
 //connection
 mongoose.connection.once('open', () => {
- server.listen(PORT, () =>  console.log(`Server running on Port: ${PORT}`))
+ app.listen(PORT, () =>  console.log(`Server running on Port: ${PORT}`))
 })
 

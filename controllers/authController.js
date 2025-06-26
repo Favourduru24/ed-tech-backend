@@ -8,10 +8,6 @@ const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    // if (!email || !password) {
-    //   return res.status(400).json({ message: 'All field are required!' });
-    // }
-
     const foundUser = await User.findOne({ email });
 
     if (!foundUser) {
@@ -19,6 +15,7 @@ const login = async (req, res, next) => {
     }
 
     const confirmPassword = await bcrypt.compare(password, foundUser.password);
+
     if (!confirmPassword) {
       return res.status(401).json({ message: 'Not Matching Password!' });
     }
@@ -65,7 +62,7 @@ const login = async (req, res, next) => {
       from: 'durupristine@gmail.com',
       to: foundUser.email,
       subject: 'Account Verification OTP',
-      text: `Your OTP IS ${otp}. Verify your account using this OTP`,
+      text: `Your OTP is ${otp}. Verify your account using this OTP`,
     };
 
     const info = await transporter.sendMail(mailOption);

@@ -62,7 +62,6 @@ const createTutor = async (req, res, next) => {
 
             const subjectCondition = subject ? { subject: { $regex: subject, $options: 'i' } } : {};
             const durationCondition = duration ? { duration: { $regex: duration, $options: 'i' } } : {};
-            // const topicCondition = search ? {topic: {$regex: search, $options: 'i' } } : {};
 
             const conditions = {
                $and:[
@@ -188,7 +187,6 @@ const createTutor = async (req, res, next) => {
               { $sort: { count: -1 } }
           ]);
   
-          console.log('Aggregation result:', topicCounts)
   
           res.status(200).json({
               success: true,

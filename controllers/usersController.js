@@ -81,40 +81,46 @@ const getAllUser = async (req, res) => {
 const updateUserProfile = async (req, res) => {
 
   try {
-    const userId = req.id
+    const userId = req.id; // Assuming this comes from auth middleware
+    const { profilePics } = req.body;
 
-   const {profilePics} = req.body
+    // Validation
+    if (!profilePics) {
+      return res.status(400).json({ 
+        message: "Profile picture URL is required" 
+      });
+    }
 
-   if(!profilePics) {
-    return res.status(400).json({
-       message: "No profile Image uploaded."
-    })
-   }
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ 
+        message: "Invalid user ID format" 
+      });
+    }
 
-   if(!mongoose.Types.ObjectId.isValid(userId)) {
-     return res.status(400).json({
-      message: 'Invalid ID format.'
-     })
-   }
+    // Update operation
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { profilePics },
+      { new: true, runValidators: true }
+    ).select('-password'); // Exclude sensitive fields
 
-   const user = await User.findById(userId).exec()
+    if (!updatedUser) {
+      return res.status(404).json({ 
+        message: "User not found" 
+      });
+    }
 
-   if(!user) {
-     return res.status(400).json({
-      message:'No User Found'
-     })
-   }
+    res.json({
+      message: "Profile updated successfully",
+      user: updatedUser
+    });
 
-   user.profilePics = profilePics
-
-   await user.save()
-
-    res.json({message: `Feed ${user._id} has been updated`})
-
-  } catch(error) {
-      console.error('Error updating profile:', error); // Log the full error
-  res.status(500).json({ message: 'Failed to update profile picture.' });
+  } catch (error) {
+    console.error('Profile update error:', error);
+    res.status(500).json({ 
+      message: "Server error during profile update" 
+    });
   }
-}
+};
 
 module.exports = {createUser, getAllUser, updateUserProfile}
