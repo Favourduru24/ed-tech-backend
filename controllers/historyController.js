@@ -14,8 +14,7 @@ const addUserToSessionHistory = async (req, res) => {
       })
 
       res.status(201).json({
-         message: 'User history fetched successfully.',
-         userHistory
+         message: 'User history created successfully.'
       })
 
      } catch(error) {
@@ -45,7 +44,7 @@ const addUserToSessionHistory = async (req, res) => {
     // Last month range (with precise time boundaries)
     const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1, 0, 0, 0);
     const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
-    const currentDay = new Date(now.getFullYear(), now.getMonth(), now.getDay())
+    const currentDay = new Date(new Date())
 
     // Base query for quiz-only records
     const quizQuery = {
@@ -60,7 +59,7 @@ const addUserToSessionHistory = async (req, res) => {
         ...quizQuery,
         createdAt: { $gte: currentMonthStart, $lte: currentMonthEnd }
       }),
-      History.countDocuments({
+      History.countDocuments({ 
         ...quizQuery,
         createdAt: { $gte: lastMonthStart, $lte: lastMonthEnd}
       }),

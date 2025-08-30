@@ -24,7 +24,6 @@ const path = require("path")
      
 }
 
-
  const logger = (req, res, next) => {
      logEvent(`${req.method}\t${req.url}\t${req.headers.origin}\t`, 'reqLog.log')
 

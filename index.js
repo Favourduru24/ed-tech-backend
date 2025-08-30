@@ -20,7 +20,7 @@ const app = express()
 app.use(credentials)
 
 connectDB()
-//Middleware
+//Built in Middleware
  app.use(express.static('public'))
  app.use(express.json())
  app.use(cookieParser())
@@ -39,9 +39,10 @@ app.use("/tutor", require('./routes/tutorRoutes'))
 app.use('/quiz', require('./routes/quizRoutes'))
 app.use('/history', require('./routes/historyRoutes'))
  
-//Error middleware
+//global Error middleware
   app.use(errorMiddlerware)
-
+   
+  //image upload with multer
    const storage = multer.diskStorage({
       destination: async (req, file, cb) => {
           if(!fs.existsSync(path.join(__dirname, '.', 'public'))) {
@@ -61,7 +62,7 @@ app.use('/history', require('./routes/historyRoutes'))
 
    const compressImage = async (filePath) => {
       const compressedPath = filePath.replace(path.extname(filePath), '-compressed.webp')
-      await sharp(filePath).resize({width: 800}).webp({quality: 80}).toFile(compressedPath) // Use compressedPath here
+      await sharp(filePath).resize({width: 800}).webp({quality: 80}).toFile(compressedPath) 
       return compressedPath
     }
 

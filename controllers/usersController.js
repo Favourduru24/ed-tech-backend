@@ -11,7 +11,8 @@ const getAllUser = async (req, res) => {
        return res.status(400).json({message: 'No user found!'})
     }
 
-     res.json({user})
+     res.json({
+      data: user})
 }
 
    const createUser = async (req, res, next) => {
@@ -66,9 +67,7 @@ const getAllUser = async (req, res) => {
              })
 
              return res.json({success: true})
-             await session.commitTransaction()  
           
-              // if(newUser) return res.status(200).json({message: `user ${username} created!`})
                
       } catch (error) {
           await session.abortTransaction()
@@ -81,7 +80,7 @@ const getAllUser = async (req, res) => {
 const updateUserProfile = async (req, res) => {
 
   try {
-    const userId = req.id; // Assuming this comes from auth middleware
+    const userId = req.id
     const { profilePics } = req.body;
 
     // Validation

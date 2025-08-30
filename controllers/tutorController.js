@@ -90,7 +90,7 @@ const createTutor = async (req, res, next) => {
 
          return res.status(200).json({
            message: 'Tutor fetched successfully!',
-           tutor,
+           data: tutor,
            totalPages: Math.ceil(tutorCount / limit)
          });
 
@@ -145,7 +145,7 @@ const createTutor = async (req, res, next) => {
 
             res.status(201).json({
                message: 'User tutor fetched successfully.',
-                userTutor
+               data: userTutor
             })
        } catch(error) {
          console.log('Something went wrong fetching User Feed!')

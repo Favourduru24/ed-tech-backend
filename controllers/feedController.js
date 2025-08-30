@@ -43,7 +43,9 @@ const createFeed = async (req, res, next) => {
 
       await session.commitTransaction();
       session.endSession();
-      return res.status(201).json({ message: 'Feed created successfully!', feed });
+      return res.status(201).json(
+        { message: 'Feed created successfully!',
+         feed });
 
   } catch (error) {
        next(error)
@@ -72,7 +74,7 @@ const createFeed = async (req, res, next) => {
         if (date) {
             const now = new Date();
             
-            if (date === '1hr') {
+            if (date === '1hr') { 
                 timeCondition.createdAt = { $gte: new Date(now - 60 * 60 * 1000) };
             } 
             else if (date === 'yesterday') {
@@ -143,7 +145,7 @@ const createFeed = async (req, res, next) => {
         const feedsCount = await Feed.countDocuments(conditions);
 
         return res.status(200).json({
-            feeds: feedsWithCommentCounts, 
+            data: feedsWithCommentCounts, 
             totalPages: Math.ceil(feedsCount / numLimit),
         });
   
@@ -172,7 +174,10 @@ const createFeed = async (req, res, next) => {
 
          const feedId = await feedQuery
 
-         return res.status(200).json({message: 'Fetch Feed Successfully', feedId})
+         return res.status(200).json({
+          message: 'Fetch Feed Successfully',
+          data: feedId
+        })
 
       } catch(error) {
         console.log('Error fetching feedId', error)
@@ -307,7 +312,10 @@ const deleteFeed = async (req, res) => {
         })
       }
 
-      res.status(201).json({message: 'Feed fetched successfully!', userFeed})
+      res.status(201).json({
+        message: 'Feed fetched successfully!',
+        data: userFeed
+      })
       
      } catch(error) {
       console.log('Error Fetching Feed!', error)
@@ -350,14 +358,6 @@ const deleteFeed = async (req, res) => {
                 });
             }
 
-          // if (feed.userId.toString() !== userId) {
-          //       await emitLikeNotification({
-          //         postOwnerId: feed.userId,
-          //         likerId: userId,
-          //         postId: feed._id
-          //       });
-          //     }
-
         } catch (error) {
             console.error('Like error:', error);
             res.status(500).json({ message: 'Server error' });
@@ -376,7 +376,7 @@ const deleteFeed = async (req, res) => {
    
     const conditions = { 
       $and: [
-        { category: categoryId }, 
+        {category: categoryId}, 
         { _id: { $ne: id } }
       ] 
     };

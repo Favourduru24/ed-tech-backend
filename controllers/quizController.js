@@ -154,7 +154,7 @@ const createQuiz = async (req, res, next) => {
                                 .limit(limit)
 
         if(!quiz?.length) {
-             return res.status(400).json({
+              return res.status(400).json({
                  message: 'No Quiz found'
              })
         }
@@ -163,7 +163,7 @@ const createQuiz = async (req, res, next) => {
 
         return res.status(201).json({
            message: 'Quiz fetched successfully.',
-            quiz,
+            data: quiz,
             totalPages: Math.ceil(quizCount / limit)
         })
 
@@ -196,7 +196,7 @@ const createQuiz = async (req, res, next) => {
 
         res.status(201).json({
            message: 'User quiz fetched successfully.',
-            userQuiz
+           data: userQuiz
         })
      } catch (error) {
        console.log('Something went wrong fetching user quiz.', error)
@@ -225,7 +225,8 @@ const createQuiz = async (req, res, next) => {
        const quizId = await quiz
   
        return res.status(201).json({
-         message: 'Quiz fetched successfully.', quizId
+         message: 'Quiz fetched successfully.',
+         data: quizId
        })
        } catch(error) {
          console.log(error, 'Something went wrong fetching quizId')
