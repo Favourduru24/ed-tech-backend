@@ -25,7 +25,10 @@ connectDB()
  app.use(express.json())
  app.use(cookieParser())
  app.use(express.urlencoded({extended: false}))
- app.use(cors(corsOption))
+ app.use(corscors({
+    origin: "https://ed-tech-frontend-e8zm.vercel.app",
+    credentials: true,
+  }))
  app.use(logger)
 
  //routes
