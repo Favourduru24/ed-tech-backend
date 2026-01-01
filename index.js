@@ -144,7 +144,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // ✅ Handle preflight OPTIONS requests explicitly
-app.options('*', cors(corsOptions));
 
 // ------------------ Middleware ------------------
 app.use(express.json());
