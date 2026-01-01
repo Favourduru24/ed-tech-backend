@@ -5,7 +5,6 @@
  const connectDB = require('./config/dbConn')
  const errorMiddlerware = require('./middleware/errorHandler')
  const cors = require('cors')
- const corsOption = require('./config/corsOption')
  const {logger} = require('./middleware/logger')
  const mongoose = require('mongoose')
 const multer = require('multer')
@@ -25,7 +24,7 @@ connectDB()
  app.use(express.json())
  app.use(cookieParser())
  app.use(express.urlencoded({extended: false}))
- app.use(corscors({
+ app.use(cors({
     origin: "https://ed-tech-frontend-e8zm.vercel.app",
     credentials: true,
   }))
