@@ -5,6 +5,7 @@
  const connectDB = require('./config/dbConn')
  const errorMiddlerware = require('./middleware/errorHandler')
  const cors = require('cors')
+ const corsOption = require('./config/corsOption')
  const {logger} = require('./middleware/logger')
  const mongoose = require('mongoose')
 const multer = require('multer')
@@ -16,7 +17,7 @@ const fsPromise = require('fs').promises
 const cloudinary = require('./config/cloudinary')
 const app = express()
 
-app.use(credentials)
+// app.use(credentials)
 
 connectDB()
 //Built in Middleware
@@ -24,10 +25,7 @@ connectDB()
  app.use(express.json())
  app.use(cookieParser())
  app.use(express.urlencoded({extended: false}))
- app.use(cors({
-    origin: "https://ed-tech-frontend-e8zm.vercel.app",
-    credentials: true,
-  }))
+ app.use(cors(corsOption))
  app.use(logger)
 
  //routes
