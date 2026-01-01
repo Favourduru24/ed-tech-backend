@@ -17,7 +17,7 @@ const fsPromise = require('fs').promises
 const cloudinary = require('./config/cloudinary')
 const app = express()
 
-// app.use(credentials)
+app.use(credentials)
 
 connectDB()
 //Built in Middleware
