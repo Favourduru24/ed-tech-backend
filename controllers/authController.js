@@ -13,6 +13,10 @@ const login = async (req, res, next) => {
     if (!foundUser) {
       return res.status(401).json({ message: 'Unauthorized no user found!' });
     }
+    
+    if(!password){
+      return res.status(400).json({ message: 'Password cannot be empty.' });
+    }
 
     const confirmPassword = await bcrypt.compare(password, foundUser.password);
 
@@ -46,40 +50,38 @@ const login = async (req, res, next) => {
       sameSite: 'None',
     });
 
-    if (foundUser.isAccountVerified === true) {
-      return res.json({ success: false, message: 'Account Already verified!' });
-    }
+    // if (foundUser.isAccountVerified === true) {
+    //   return res.json({ success: false, message: 'Account Already verified!' });
+    // }
 
-    const otp = String(Math.floor(100000 + Math.random() * 900000));
-    const hashedOtp = await bcrypt.hash(otp, 10)
+    // const otp = String(Math.floor(100000 + Math.random() * 900000));
+    // const hashedOtp = await bcrypt.hash(otp, 10)
 
-    foundUser.verifyOpt = hashedOtp;
-    foundUser.verifyOptExpireAt = Date.now() + 15 * 60 * 1000;
+    // foundUser.verifyOpt = hashedOtp;
+    // foundUser.verifyOptExpireAt = Date.now() + 15 * 60 * 1000;
 
-    await foundUser.save();
+    // await foundUser.save();
 
-    const mailOption = {
-      from: 'durupristine@gmail.com',
-      to: foundUser.email,
-      subject: 'Account Verification OTP',
-      text: `Your OTP is ${otp}. Verify your account using this OTP`,
-    };
+    // const mailOption = {
+    //   from: 'durupristine@gmail.com',
+    //   to: foundUser.email,
+    //   subject: 'Account Verification OTP',
+    //   text: `Your OTP is ${otp}. Verify your account using this OTP`,
+    // };
 
-    const info = await transporter.sendMail(mailOption);
-    console.log('Email sent', info.response);
+    // const info = await transporter.sendMail(mailOption);
+    // console.log('Email sent', info.response);
 
     return res.json({
       success: true,
-      message: 'Verification OTP sent to email.',
+      message: 'User login successfully.',
       accessToken,
     });
   } catch (error) {
-    console.error('Caught error:', error);
-    // avoid sending another response if already sent
     if (!res.headersSent) {
       return res.status(500).json({ success: false, message: 'Server error' });
     }
-    next(error); // fallback just in case
+    next(error);
   }
 };
 

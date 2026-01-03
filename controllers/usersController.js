@@ -33,8 +33,7 @@ const getAllUser = async (req, res) => {
         const existingUser = await User.findOne({email})
 
         if(existingUser) {
-         // return res.status(400).json({message: 'user already created!'})
-       const error = new Error('user already exists')
+        const error = new Error('user already exists')
         error.statusCode = 409
         throw error
         }
@@ -51,29 +50,33 @@ const getAllUser = async (req, res) => {
               
              // Sending welcome email
              
-             const mailOptions = {
-               from: '"ed-tech" <durupristine@gmail.com>',
-               to: email,
-               subject: 'Welcome to Ed-Tech',
-              //  text: `Welcome to Ed-Tech! Your account has been created with the email: ${email}.`,
-               html: EMAIL_VERIFY_TEMPLATE.replace("{{email}}", email).replace("{{username}}", username)
-             };
+            //  const mailOptions = {
+            //    from: '"ed-tech" <durupristine@gmail.com>',
+            //    to: email,
+            //    subject: 'Welcome to Ed-Tech',
+            //   //  text: `Welcome to Ed-Tech! Your account has been created with the email: ${email}.`,
+            //    html: EMAIL_VERIFY_TEMPLATE.replace("{{email}}", email).replace("{{username}}", username)
+            //  };
 
-              // await transporter.sendMail(mailOptions)
-              await transporter.sendMail(mailOptions, (error, info) => {
-               if(error) return console.log(error, 'Error sending email!')
+            //   // await transporter.sendMail(mailOptions)
+            //   await transporter.sendMail(mailOptions, (error, info) => {
+            //    if(error) return console.log(error, 'Error sending email!')
 
-                console.log('Email sent', info.response)
-             })
+            //     console.log('Email sent', info.response)
+            //  })
 
-             return res.json({success: true})
+             return res.json({success: true,
+                 data: {
+                username: newUser.username,
+                 email: newUser.email,
+                 createdAt: newUser.createdAt
+                }})
           
                
       } catch (error) {
           await session.abortTransaction()
           session.endSession()
           next(error)
-          console.log(error)
       }
 }
 
